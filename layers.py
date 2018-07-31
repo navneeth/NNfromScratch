@@ -145,3 +145,16 @@ def backward_step(activations, targets, layers):
         # Compute gradient at output of previous layer (input of current layer):
         output_grad = input_grad
     return list(param_grads)  # Return the parameter gradients
+
+
+# Define a method to update the parameters
+def update_params(layers, param_grads, learning_rate):
+    """
+    Function to update the parameters of the given layers with the given gradients
+    by gradient descent with the given learning rate.
+    """
+    for layer, layer_backprop_grads in zip(layers, param_grads):
+        for param, grad in zip(layer.get_params_iter(), layer_backprop_grads):
+            # The parameter returned by the iterator point to the memory space of
+            #  the original layer and can thus be modified inplace.
+            param -= learning_rate * grad  # Update each parameter
